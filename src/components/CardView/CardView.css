@@ -1,0 +1,46 @@
+.Card{
+    font-family: inherit;
+    box-shadow: 0 1px 2px 0 #2e44c2; 
+    background-color: #fff;
+    border-radius: 10px;
+    margin : 20px;
+    display: inline-block;
+    max-width: 550px;
+  }
+  
+  .Card h2{
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 150%;
+    text-align: center;
+    color: #2e44c2;
+    box-shadow: 0 2px 4px 0;
+  }
+
+  .Card p{
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+    color: #2e44c2;
+    padding: 10px;
+  }
+
+  .Card .CardImg img {
+    padding: 10px;
+    border-radius: 15%;
+  }
+
+  .togggleBtn{
+    background: #2e44c2;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .togggleBtn:hover {
+    background-color: rgb(86, 97, 250);
+    color: #fff;
+  }
+  

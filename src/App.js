@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.css';
+import Navigation from './components/UI/Navigation/Navigation'
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-       
+      <div className={classes.App}>
+       <Navigation />
       </div>
     );
   }
