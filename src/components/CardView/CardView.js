@@ -3,15 +3,15 @@ import classes from "./CardView.css"
 
 
 
-const cardView = (props) => {
+const cardView = ({imageUrl, name, description, nbOfTracks, clicked}) => {
     return (
-        <div className={classes.Card}>
+        <div className={classes.Card} onClick={clicked}>
             <div className={classes.CardImg}>
-                <img src={props.imageUrl} alt='img' />
+                <img src={imageUrl} alt='img' />
             </div>
-            <div><h2>{props.name}</h2></div>
-            <div><p>{props.description}</p></div>
-            {props.nbOfTracks && <div><p>{props.nbOfTracks}</p></div>}
+            <div><h2>{name}</h2></div>
+            <div><p>{description}</p></div>
+            {nbOfTracks && <div><p>{nbOfTracks}</p></div>}
         </div>
     );
 }

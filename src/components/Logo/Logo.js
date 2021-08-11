@@ -4,7 +4,7 @@ import musicLogo from '../../assets/images/music.png';
 import classes from './Logo.css'
 
 
-const logo = (props) => (
+const logo = () => (
     <div className={classes.Logo} >
         <img src={musicLogo} alt="MyMusic" />
     </div>

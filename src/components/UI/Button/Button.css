@@ -1,13 +1,15 @@
 .Button {
-    background-color: transparent;
-    border: none;
     color: white;
     outline: none;
     cursor: pointer;
     font: inherit;
-    padding: 10px;
     margin: 10px;
     font-weight: bold;
+    border: 3px solid #2e44c2;
+    border-radius: 10%;
+    text-align: center;
+    padding: 8px;
+    background-color: white;
 }
 
 .Button:first-of-type {
@@ -16,8 +18,13 @@
 }
 
 .Success {
-    color: #2e44c2;
+    color: white;
     font-weight: bold;
+    border: 3px solid #2e44c2;
+    border-radius: 10%;
+    text-align: center;
+    padding: 8px;
+    background-color: #2e44c2;
 }
 
 .Danger {
@@ -30,5 +37,10 @@
     color: grey;
     cursor: not-allowed;
     font-weight: bold;
+    border: 3px solid #2e44c2;
+    border-radius: 10%;
+    text-align: center;
+    padding: 8px;
+    background-color: white;
 
 }

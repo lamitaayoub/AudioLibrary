@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import classes from "./SignUp.css";
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import axios from '../../axios-albums';
+import { Link } from 'react-router-dom';
 
 
-class SignUp extends Component {
+const signUp = () => {
 
-    state = {
-        signUpForm: {
+    const [signUpForm, setSignUpForm] = useState(
+        {
             name: {
                 elementType: 'input',
                 elementConfig: {
@@ -15,7 +17,7 @@ class SignUp extends Component {
                     placeholder: 'Your Name'
                 },
                 value: '',
-                message: 'Invalid Name',
+                message: 'Please enter your name',
                 validation: {
                     required: true
                 },
@@ -46,7 +48,7 @@ class SignUp extends Component {
                     placeholder: 'Your Password'
                 },
                 value: '',
-                message: 'Invalid Password',
+                message: 'Password must have a minimum of 8 characters, Uppercase and Lowercase letters, Numbers and Symbols',
                 validation: {
                     required: true,
                     minLength: 8,
@@ -73,11 +75,14 @@ class SignUp extends Component {
                 touched: false
 
             }
-        },
-        formIsValid: false
-    }
+        }
 
-    checkValidity(value, rules) {
+    )
+    const [formIsValid, setFormIsValid] = useState(false);
+
+
+
+    const checkValidity = (value, rules) => {
         let isValid = true;
 
         if (rules.required) {
@@ -96,7 +101,7 @@ class SignUp extends Component {
         }
 
         if (rules.passMatch) {
-            const pattern = this.state.signUpForm.password.value;
+            const pattern = signUpForm.password.value;
             isValid = pattern.match(value) && isValid;
         }
 
@@ -107,16 +112,16 @@ class SignUp extends Component {
 
 
 
-    inputChangedHandler = (event, inputIdentifier) => {
+    const inputChangedHandler = (event, inputIdentifier) => {
         const updatedSignUpForm = {
-            ...this.state.signUpForm
+            ...signUpForm
         };
         const updatedFormElement = {
             ...updatedSignUpForm[inputIdentifier]
 
         };
         updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
         updatedSignUpForm[inputIdentifier] = updatedFormElement;
 
@@ -126,59 +131,68 @@ class SignUp extends Component {
             formIsValid = updatedSignUpForm[inputIdentifier].valid && formIsValid
         }
 
-        this.setState({ signUpForm: updatedSignUpForm, formIsValid: formIsValid });
+        setSignUpForm(updatedSignUpForm);
+        setFormIsValid(formIsValid);
     }
 
-    render() {
 
-        const formElementsArray = [];
-        for (let key in this.state.signUpForm) {
-            formElementsArray.push({
-                id: key,
-                config: this.state.signUpForm[key]
-            });
+
+    const signUpHandler = () => {
+        const user = {
+            email: signUpForm.email.value,
+            password: signUpForm.password.value
         }
+        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBfmnMPLfBZ85ZXYBFNimKJmkE_QpZX61E', user)
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
+    }
 
-        let form = (
+
+
+    const formElementsArray = [];
+    for (let key in signUpForm) {
+        formElementsArray.push({
+            id: key,
+            config: signUpForm[key]
+        });
+    }
+
+
+    const form = formElementsArray.map(formElement => (
+
+        <Input
+            key={formElement.id}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            label={formElement.config.label}
+            invalid={!formElement.config.valid}
+            message={!formElement.config.valid && formElement.config.touched ? formElement.config.message : null}
+            touched={formElement.config.touched}
+            changed={(event) => inputChangedHandler(event, formElement.id)}
+        />
+    )
+
+    )
+
+    return (
+        <div>
+            <div className={classes.Title}>
+                <h4>Sign Up</h4>
+            </div>
             <form className={classes.SignUp} >
-                {
-                    formElementsArray.map(formElement => (
-
-                        <Input
-                            key={formElement.id}
-                            elementType={formElement.config.elementType}
-                            elementConfig={formElement.config.elementConfig}
-                            value={formElement.config.value}
-                            label={formElement.config.label}
-                            invalid={!formElement.config.valid}
-                            message={!formElement.config.valid && formElement.config.touched ? formElement.config.message : null}
-                            touched={formElement.config.touched}
-                            changed={(event) => this.inputChangedHandler(event, formElement.id)}
-                        />
-                    )
-
-                    )
-                }
-
-                {/* <button disabled={!this.state.formIsValid}> Sign up </button> */}
-                <Button btnType="Success" disabled={!this.state.formIsValid}> Sign up </Button>
+                {form}
+                <Link to={'/'}>
+                    <Button btnType="Success" disabled={!formIsValid} clicked={() => signUpHandler()}> Sign up </Button>
+                </Link>
                 <div>
                     <p>Already have an account? <a href="/SignIn" >Sign In</a></p>
                 </div>
             </form>
-        )
+        </div>
+    )
 
-
-
-        return (
-            <div className={classes.Title}>
-                <h4>Sign Up</h4>
-                {form}
-            </div>
-
-        )
-    }
 
 }
 
-export default SignUp;
+export default signUp;

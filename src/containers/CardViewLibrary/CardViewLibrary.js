@@ -1,47 +1,61 @@
-import React, { Component } from 'react';
-import CardViewData from '../../CardViewData';
+import axios from '../../axios-albums';
+import React, { useState, useEffect } from 'react';
 import CardView from '../../components/CardView/CardView';
 import classes from '../../components/CardView/CardView.css'
+import { Spinner } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 
-class CardViewLibrary extends Component {
+const cardViewLibrary = (props) => {
 
-    state = {
-        CardViewData,
-        showNbOfTracks: true,
-        selectedCardId: null
+    const [cardViewData, setCardViewData] = useState(null);
+    const [showNbOfTracks, setShowNbOfTracks] = useState(true);
+    const [selectedCardId, setSelectedCardId] = useState(null);
 
+
+    const toggleDataHandler = () => {
+        setShowNbOfTracks(!showNbOfTracks);
     }
-    toggleDataHandler = () => {
-        this.setState((prevState) => {
-            return { ...prevState, showNbOfTracks: !prevState.showNbOfTracks }
-        })
+
+    useEffect(() => {
+        axios.get('/photos')
+            .then(response => {
+                setCardViewData(response.data)
+            });
+    }, []
+    )
+    const cardViewSelectHandler = (id) => {
+        setSelectedCardId(id);
     }
 
-    render() {
 
-        return (
+    // const { cardViewData } = cardViewData
+    return (
+        <div>
             <div>
-                <div>
-                    <button className={classes.togggleBtn} onClick={this.toggleDataHandler}>Toggle Tracks</button>
-                </div>
-                <div>
-                    {CardViewData.map((album) => {
-                        return (
-                            <CardView
-                                key={album._id}
-                                imageUrl={album.imageUrl}
-                                name={album.name}
-                                description={album.description}
-                                nbOfTracks={this.state.showNbOfTracks ? album.nbOfTracks : null}
-                            />
-                        );
-                    })}
-                </div>
-                <div>
-                </div>
+                <button className={classes.togggleBtn} onClick={toggleDataHandler}>Toggle Tracks</button>
             </div>
-        )
-    }
+            <div>
+                {cardViewData ? (
+                    cardViewData.map((album) => (
+                        (<Link to={'/' + album.id} key={album.id}>
+                            <CardView
+
+                                imageUrl={album.url}
+                                name={album.title.slice(0, 10)}
+                                description={album.title.slice(0, 30)}
+                                nbOfTracks={showNbOfTracks ? album.albumId : null}
+                                clicked={() => cardViewSelectHandler(album.id)}
+                            />
+                        </Link>))
+                    )
+                ) : (<Spinner animation="border" variant="primary" />)
+                }
+            </div>
+            <div>
+            </div>
+        </div>
+    )
+
 }
-export default CardViewLibrary;
+export default cardViewLibrary;

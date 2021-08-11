@@ -32,10 +32,10 @@ const navigation = () => {
                 <Route exact path="/">
                     <CardViewLibrary />
                 </Route>
-                <Route path="/SignUp">
+                <Route exact path="/SignUp">
                     <SignUp />
                 </Route>
-                <Route path="/SignIn">
+                <Route exact path="/SignIn">
                     <SignIn />
                 </Route>
             </Switch>
