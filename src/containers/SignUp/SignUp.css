@@ -1,27 +1,99 @@
-.SignUp{
-    margin: 20px auto;
-    width : 80%;
-    text-align: center;
-    box-shadow: 0 2px 3px #ccc;
-    border: 1px solid #eee;
+.Container{
+    background-color: lightblue;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.AppWrapper{
+    background-color: #fff;
+    min-width: 350px;
+    min-height: 550px;
     padding: 10px;
     box-sizing: border-box;
-
+    border-radius: 5px;
 }
 
-@media (min-width: 600px) {
-    .SignUp{
-        width : 500px;
-    }
-    
-}
-
-.Title h4 {
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 50px;
+.Title{
     color: #2e44c2;
-    margin-top: 10px;
+    text-align: center;
+    margin: 40px 0px 40px 0px;
+}
+.Name,
+.Email,
+.Password,
+.ConfirmPassword {
+    margin: 20px;
+    color: #969292;
+    font-size: 16px;
+}
+
+.ConfirmPassword{
+    margin-bottom: 40px;
+}
+
+.Input{
+    height: 32px;
+    font-size: 20px;
+    outline: none;
+    width: 100%;
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: 2px solid black;
+    margin-bottom: 10px;
+}
+
+.ErrorMsg{
+    color: red;
+    max-width: 300px;
+}
+
+
+.Submit{
+    display: flex;
+    text-transform: uppercase;
+    font-size: 20px;
+    border-radius: 25px;
+    color: white;
+    padding: 10px 60px;
+    background: linear-gradient(to right, lightblue, #2e44c2);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 17px, 
+    rgba(0, 0, 0.22) 0px 7px 6px;
+    margin: auto;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.1s;
 
 }
+.Paragraph{
+    margin-top: 15px;
+}
+
+
+.button:active {
+    transform: translateY(2px);
+}
+
+.Submit:disabled {
+    color: grey;
+    cursor: not-allowed;
+}
+
+.FormSuccess{
+    display: flex;
+    justify-content: center;
+    margin-top: 250px;
+    min-width: 370px;
+    color: #2e44c2;
+}
+
+
+
+
+
+
 

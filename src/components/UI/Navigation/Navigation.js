@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import CardViewLibrary from '../../../containers/CardViewLibrary/CardViewLibrary';
 import Logo from '../../Logo/Logo';
-import { Link, Switch, Route } from "react-router-dom";
-import SignUp from '../../../containers/SignUp/SignUp';
-import SignIn from '../../../containers/SignIn/SignIn';
-import classes from './Navigation.css'
+import { Link } from "react-router-dom";
+import classes from './Navigation.css';
+import { AuthContext } from '../../../Auth';
+import app from '../../../base';
+
 
 
 const navigation = () => {
+ const { currentUser } = useContext(AuthContext);
+
     return (
         <div>
             <Navbar collapseOnSelect expand="lg" className={classes.Navbar} variant="dark">
@@ -22,23 +24,13 @@ const navigation = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="ml-auto">
-                            <Nav.Link href="/SignIn">Sign in</Nav.Link>
-                            <Nav.Link href="/SignUp" >Sign up</Nav.Link>
+                         { !currentUser && <Nav.Link href="/SignIn">Sign in</Nav.Link>}
+                         { !currentUser && <Nav.Link href="/SignUp" >Sign up</Nav.Link> }
+                         { currentUser && <Nav.Link onClick={ () => app.auth().signOut()} href="/" >Logout</Nav.Link>}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Switch>
-                <Route exact path="/">
-                    <CardViewLibrary />
-                </Route>
-                <Route exact path="/SignUp">
-                    <SignUp />
-                </Route>
-                <Route exact path="/SignIn">
-                    <SignIn />
-                </Route>
-            </Switch>
         </div>
     )
 }

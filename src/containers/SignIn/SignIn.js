@@ -1,128 +1,68 @@
-import React, { useState } from 'react';
-import classes from "./SignIn.css";
-import Input from '../../components/UI/Input/Input';
-import Button from '../../components/UI/Button/Button';
+import React, { useCallback, useContext } from 'react';
+import classes from '../SignUp/SignUp.css';
+import { withRouter, Redirect } from "react-router";
+import app from "../../base.js";
+import { AuthContext } from "../../Auth.js";
 
-
-const signIn = () => {
-    const [signInForm, setSignInForm] = useState(
-        {
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'email',
-                    placeholder: 'Your Email'
-                },
-                value: '',
-                message: 'Please enter an Email',
-                validation: {
-                    required: true,
-                },
-                valid: false,
-                touched: false
-            },
-
-            password: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'password',
-                    placeholder: 'Your Password'
-                },
-                value: '',
-                message: 'Please enter a Password',
-                validation: {
-                    required: true,
-                },
-                valid: false,
-                touched: false
-
+const SignIn = ({ history }) => {
+    const handleSignIn = useCallback(
+        async event => {
+            event.preventDefault();
+            const { email, password } = event.target.elements;
+            try {
+                await app
+                    .auth()
+                    .signInWithEmailAndPassword(email.value, password.value);
+                history.push("/");
+            } catch (error) {
+                alert(error);
             }
-        }
-    )
+        },
+        [history]
+    );
 
-    const [formIsValid, setFormIsValid] = useState(false);
-   
+    const { currentUser } = useContext(AuthContext);
 
-   const  checkValidity = (value, rules)  => {
-        let isValid = true;
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        return isValid;
-
+    if (currentUser) {
+        return <Redirect to="/" />;
     }
 
 
 
-    const inputChangedHandler = (event, inputIdentifier) => {
-        const updatedSignInForm = {
-            ...signInForm
-        };
-        const updatedFormElement = {
-            ...updatedSignInForm[inputIdentifier]
-
-        };
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedFormElement.touched = true;
-        updatedSignInForm[inputIdentifier] = updatedFormElement;
-
-
-        let formIsValid = true;
-        for (let inputIdentifier in updatedSignInForm) {
-            formIsValid = updatedSignInForm[inputIdentifier].valid && formIsValid
-        }
-
-        // this.setState({ signInForm: updatedSignInForm, formIsValid: formIsValid });
-        setSignInForm(updatedSignInForm);
-        setFormIsValid(formIsValid);
-    }
-
-
-
-        const formElementsArray = [];
-        for (let key in signInForm) {
-            formElementsArray.push({
-                id: key,
-                config: signInForm[key]
-            });
-        }
-
-        const form = formElementsArray.map(formElement => (
-
-            <Input
-                key={formElement.id}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                label={formElement.config.label}
-                invalid={!formElement.config.valid}
-                message={!formElement.config.valid && formElement.config.touched ? formElement.config.message : null}
-                touched={formElement.config.touched}
-                changed={(event) => inputChangedHandler(event, formElement.id)}
-            />
-        )
-
-        )
-
-        return (
-            <div>
+    return (
+        <div className={classes.Container}>
+            <div className={classes.AppWrapper}>
                 <div className={classes.Title}>
-                    <h4>Sign In</h4>
+                    <h2>
+                        Sign In
+                    </h2>
                 </div>
-                <form className={classes.SignIn} >
-                    {form}
-                    <Button btnType="Success" disabled={!formIsValid}> Sign In </Button>
+                <form onSubmit={handleSignIn} className={classes.FormWrapper}>
+                    <div className={classes.Email}>
+                        <label className={classes.Label}>Email</label>
+                        <input className={classes.Input}
+                            type="email"
+                            name="email"                            
+                        />
+                    </div>
+                    <div className={classes.Password}>
+                        <label className={classes.Label}>Password</label>
+                        <input className={classes.Input}
+                            type="password"
+                            name="password"
+                        />
+                    </div>
                     <div>
+                        <button className={classes.Submit} type="submit">Sign In</button>
+                    </div>
+                    <div className={classes.Paragraph}>
                         <p>Don't have an account? <a href="/SignUp" >Sign Up</a></p>
                     </div>
                 </form>
             </div>
-        )
-    }
+
+        </div>);
 
 
-
-export default signIn;
+}
+export default withRouter(SignIn);

@@ -18,7 +18,7 @@ const cardViewLibrary = (props) => {
     }
 
     useEffect(() => {
-        axios.get('/photos')
+        axios.get('/photos?_limit=20')
             .then(response => {
                 setCardViewData(response.data)
             });
